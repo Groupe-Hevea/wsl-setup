@@ -3,6 +3,9 @@
 - name: set facts for use later
   include_tasks: tools/set_facts.yml
 
+- name: create bash_profile
+  include_tasks: tools/bash_profile.yml
+
 - name: install terraform
   include_tasks: tools/terraform.yml
 
