@@ -65,12 +65,14 @@
 ## Start docker at startup :
 # Windows 10
 - name: Start docker at startup - Windows 10
-  ansible.builtin.blockinfile:
-    path: "/home/{{ lookup('env', 'USER') }}/.bash_profile"
-    block: |
-      #Start docker at startup
+  ansible.builtin.copy:
+    content: |
+      # Start docker at startup
       wsl.exe -u root -e sh -c "service docker status || service docker start"
-    state: present
+    dest: "/home/{{ lookup('env', 'USER') }}/.bashrc.d/docker_startup.bashrc"
+    mode: '0644'
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
   when: winver == "10"
 
 # Windows 11
@@ -93,10 +95,7 @@
   when: winver == "11"
 
 - name: Delete old startup for Windows 10 - Windows 11
-  ansible.builtin.blockinfile:
-    path: "/home/{{ lookup('env', 'USER') }}/.bash_profile"
-    block: |
-      #Start docker at startup
-      wsl.exe -u root -e sh -c "service docker status || service docker start"
+  ansible.builtin.file:
+    path: "/home/{{ lookup('env', 'USER') }}/.bashrc.d/docker_startup.bashrc"
     state: absent
   when: winver == "11"

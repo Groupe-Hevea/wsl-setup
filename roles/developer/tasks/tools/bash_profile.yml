@@ -1,9 +1,0 @@
----
-
-- name: ensure .bash_profile exists
-  ansible.builtin.copy:
-    content: ""
-    dest: "/home/{{ lookup('env', 'USER') }}/.bash_profile"
-    mode: "0640"
-    force: no
-    owner: "{{ lookup('env', 'USER') }}"

@@ -1,0 +1,12 @@
+---
+
+- name: define shell env var
+  ansible.builtin.copy:
+    content: |
+      # Define shell env var
+      export UID
+      export GID="$(id -g $(whoami))"
+    dest: "/home/{{ lookup('env', 'USER') }}/.bashrc.d/shell_env_var.bashrc"
+    mode: '0644'
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
