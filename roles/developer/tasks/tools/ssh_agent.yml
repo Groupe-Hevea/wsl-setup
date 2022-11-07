@@ -3,16 +3,14 @@
 - name: enable ssh agent
   ansible.builtin.copy:
     content: |
-      # Taken from https://github.com/Groupe-Hevea/puppet-config/blob/master/modules/account/templates/ssh-agent.bashrc.erb
       # Enable ssh agent
-      ssh-add -l &>/dev/null
-      if [[ "$?" == 2 ]]; then
-        eval $(ssh-agent) >/dev/null
-      fi
-
-      ssh-add -l &>/dev/null
-      if [[ "$?" == 1 ]]; then
-        ssh-add ~/.ssh/id_rsa &>/dev/null
+      if [ -z "$(pgrep ssh-agent)" ]; then
+        rm -rf /tmp/ssh-*
+        eval $(ssh-agent -s)
+        ssh-add
+      else
+        export SSH_AGENT_PID=$(pgrep ssh-agent)
+        export SSH_AUTH_SOCK=$(find /tmp/ssh-* -name agent.*)
       fi
     dest: "/home/{{ lookup('env', 'USER') }}/.bashrc.d/ssh_agent.bashrc"
     mode: '0644'
