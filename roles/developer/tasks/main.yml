@@ -3,8 +3,14 @@
 - name: set facts for use later
   include_tasks: tools/set_facts.yml
 
-- name: create bash_profile
-  include_tasks: tools/bash_profile.yml
+- name: create bashrcd
+  include_tasks: tools/bashrcd.yml
+
+- name: set shell env var
+  include_tasks: tools/shell_env_var.yml
+
+- name: set ssh agent
+  include_tasks: tools/ssh_agent.yml
 
 - name: install terraform
   include_tasks: tools/terraform.yml
