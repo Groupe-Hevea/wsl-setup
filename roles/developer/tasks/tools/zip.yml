@@ -1,0 +1,8 @@
+---
+- name: install zip bundle packages
+  apt:
+    name:
+      - zip
+      - unzip
+    state: latest
+    update_cache: yes

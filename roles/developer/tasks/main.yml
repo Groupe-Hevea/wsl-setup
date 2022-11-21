@@ -12,6 +12,9 @@
 - name: set ssh agent
   include_tasks: tools/ssh_agent.yml
 
+- name: install zip and unzip
+  include_tasks: tools/zip.yml
+
 - name: install terraform
   include_tasks: tools/terraform.yml
 
@@ -23,3 +26,6 @@
 
 - name: install lastpass-cli
   include_tasks: tools/lastpass-cli.yml
+
+- name: install aws-cli
+  include_tasks: tools/aws_cli.yml
