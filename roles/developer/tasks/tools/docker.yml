@@ -27,7 +27,7 @@
     name: iptables
     path: /usr/sbin/iptables-legacy
     link: /usr/sbin/iptables
-    state: present
+    state: selected
 
 - name: install docker
   apt:
