@@ -8,14 +8,13 @@
 
 - name: ensure dependencies are installed
   apt:
-    name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg-agent', 'software-properties-common']
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg', 'lsb-release', 'software-properties-common']
     state: present
     update_cache: yes
 
 - name: add docker apt fingerprint
   apt_key:
     url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
-    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
     state: present
 
 - name: add docker apt repository
@@ -23,9 +22,16 @@
     repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
     state: present
 
+- name: Use iptable legacy
+  community.general.alternatives:
+    name: iptables
+    path: /usr/sbin/iptables-legacy
+    link: /usr/sbin/iptables
+    state: selected
+
 - name: install docker
   apt:
-    name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose-plugin']
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-buildx-plugin', 'docker-compose-plugin']
     state: present
     update_cache: yes
 
@@ -54,13 +60,6 @@
   ansible.builtin.copy:
     src: "{{ role_path }}/files/daemon.json"
     dest: /etc/docker/daemon.json
-
-# docker compose
-- name: install docker compose
-  get_url:
-    url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64
-    dest: /usr/local/bin/docker-compose
-    mode: 0755
 
 ## Start docker at startup :
 # Windows 10

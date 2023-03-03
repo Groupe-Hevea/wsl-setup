@@ -4,7 +4,10 @@
   hosts: localhost
   become: yes
   vars:
-    docker_compose_version: v2.6.1
     docker_users: ["{{ lookup('env', 'USER') }}"]
+  vars_prompt:
+    - name: github_token
+      prompt: What is your github_token?
+      private: true
   roles:
     - developer

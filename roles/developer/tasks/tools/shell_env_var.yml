@@ -6,6 +6,8 @@
       # Define shell env var
       export UID
       export GID="$(id -g $(whoami))"
+      export GITHUB_TOKEN={{ github_token }}
+      export COMPOSER_AUTH="{\"github-oauth\": {\"github.com\": \"$GITHUB_TOKEN\"}}"
     dest: "/home/{{ lookup('env', 'USER') }}/.bashrc.d/shell_env_var.bashrc"
     mode: '0644'
     owner: "{{ lookup('env', 'USER') }}"
