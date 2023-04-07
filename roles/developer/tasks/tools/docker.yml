@@ -12,11 +12,6 @@
     state: present
     update_cache: yes
 
-- name: add docker apt fingerprint
-  apt_key:
-    url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
-    state: present
-
 - name: add docker apt repository
   apt_repository:
     repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
