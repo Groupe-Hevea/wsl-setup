@@ -8,6 +8,6 @@
   vars_prompt:
     - name: github_token
       prompt: What is your github_token?
-      private: true
+      private: false
   roles:
     - developer
