@@ -1,0 +1,55 @@
+---
+
+- name: ensure user .rc.d exists
+  ansible.builtin.file:
+    path: "/home/{{ lookup('env', 'USER') }}/.rc.d"
+    state: directory
+    mode: '0755'
+
+- name: load rc.d files for all shells
+  ansible.builtin.blockinfile:
+    path: "{{ item }}"
+    create: true
+    block: |
+      # Load rc.d files for all shells
+      if [ -d "$HOME/.rc.d" ]; then
+        for file in $HOME/.rc.d/*.sh; do
+          if [ -r "$file" ]; then
+            . "$file"
+          fi
+        done
+        unset file
+      fi
+  with_items:
+  - "/home/{{ lookup('env', 'USER') }}/.bashrc"
+  - "/home/{{ lookup('env', 'USER') }}/.zshrc"
+
+- name: define user shell env vars
+  ansible.builtin.copy:
+    content: |
+      # Define shell env vars
+      export UID
+      export GID="$(id -g $(whoami))"
+      export GITHUB_TOKEN={{ github_token }}
+      export COMPOSER_AUTH="{\"github-oauth\": {\"github.com\": \"$GITHUB_TOKEN\"}}"
+    dest: "/home/{{ lookup('env', 'USER') }}/.rc.d/98-shell_env_vars.sh"
+    mode: '0644'
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+
+- name: enable ssh agent for the user
+  ansible.builtin.copy:
+    content: |
+      # Enable ssh agent
+      if [ -z "$(pgrep ssh-agent)" ]; then
+        rm -rf /tmp/ssh-*
+        eval $(ssh-agent -s)
+        ssh-add
+      else
+        export SSH_AGENT_PID=$(pgrep ssh-agent)
+        export SSH_AUTH_SOCK=$(find /tmp/ssh-* -name 'agent.*')
+      fi
+    dest: "/home/{{ lookup('env', 'USER') }}/.rc.d/01-ssh_agent.sh"
+    mode: '0644'
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"

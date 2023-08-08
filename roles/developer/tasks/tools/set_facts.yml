@@ -7,5 +7,9 @@
   when: winver is undefined
 
 - name: Set fact winver with associated windows version (10, 11, ...)
-  set_fact: 
+  set_fact:
     winver: "{{ winver.stdout }}"
+
+- name: debug winver
+  debug:
+    var: winver
