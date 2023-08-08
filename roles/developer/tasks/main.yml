@@ -5,8 +5,8 @@
 - name: set facts for use later
   include_tasks: tools/set_facts.yml
 
-- name: create bashrcd
-  include_tasks: tools/bashrcd.yml
+- name: set users .profile.d dir
+  include_tasks: tools/profiled.yml
 
 - name: set shell env var
   include_tasks: tools/shell_env_var.yml

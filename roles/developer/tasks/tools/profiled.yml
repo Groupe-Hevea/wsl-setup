@@ -1,0 +1,18 @@
+---
+
+- name: profile.d customizations
+  ansible.builtin.blockinfile:
+    path:  "/etc/profile.d/Z99-devx"
+    block: |
+      if [ -d ~/.profile.d ]; then
+        for file in ~/.profile.d/*; do
+          [ -e "$file" ] || continue
+          source "$file"
+        done
+      fi
+
+- name: ensure .profile.d exists
+  ansible.builtin.file:
+    path: "/home/{{ lookup('env', 'USER') }}/.profile.d"
+    state: directory
+    mode: '0755'

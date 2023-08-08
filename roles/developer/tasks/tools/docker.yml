@@ -63,7 +63,7 @@
     content: |
       # Start docker at startup
       wsl.exe -u root -e sh -c "service docker status || service docker start"
-    dest: "/home/{{ lookup('env', 'USER') }}/.bashrc.d/docker_startup.bashrc"
+    dest: "/home/{{ lookup('env', 'USER') }}/.profile.d/00-docker_startup.sh"
     mode: '0644'
     owner: "{{ lookup('env', 'USER') }}"
     group: "{{ lookup('env', 'USER') }}"
@@ -90,6 +90,6 @@
 
 - name: Delete old startup for Windows 10 - Windows 11
   ansible.builtin.file:
-    path: "/home/{{ lookup('env', 'USER') }}/.bashrc.d/docker_startup.bashrc"
+    path: "/home/{{ lookup('env', 'USER') }}/.profile.d/00-docker_startup.sh"
     state: absent
   when: winver == "11"

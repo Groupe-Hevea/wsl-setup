@@ -12,7 +12,7 @@
         export SSH_AGENT_PID=$(pgrep ssh-agent)
         export SSH_AUTH_SOCK=$(find /tmp/ssh-* -name agent.*)
       fi
-    dest: "/home/{{ lookup('env', 'USER') }}/.bashrc.d/ssh_agent.bashrc"
+    dest: "/home/{{ lookup('env', 'USER') }}/.profile.d/01-ssh_agent.sh"
     mode: '0644'
     owner: "{{ lookup('env', 'USER') }}"
     group: "{{ lookup('env', 'USER') }}"
