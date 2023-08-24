@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+
+search {{ dns_base_domain }}
+options timeout:1 attempts:1 ndots:2 rotate
+
+# allopneus DNS
+{% for ns in dns_private_servers %}
+nameserver {{ ns }}
+{% endfor %}
+
+# we use gooogle public DNS as fallbacks
+# when the VPN is not connected
+{% for ns in dns_public_servers %}
+nameserver {{ ns }}
+{% endfor %}

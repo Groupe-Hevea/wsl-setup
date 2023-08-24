@@ -5,8 +5,13 @@
 - name: set facts for use later
   include_tasks: tools/set_facts.yml
 
-- name: create bashrcd
-  include_tasks: tools/bashrcd.yml
+# use wsl.conf on windows 11
+- name: set up wsl.conf
+  include_tasks: wsl/wsl.conf.yml
+  when: winver == "11"
+
+- name: set up resolv.conf
+  include_tasks: wsl/resolv.conf.yml
 
 - name: set shell env var
   include_tasks: tools/shell_env_var.yml

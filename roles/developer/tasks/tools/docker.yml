@@ -70,22 +70,16 @@
   when: winver == "10"
 
 # Windows 11
-- name: Ensure wsl.conf exists - Windows 11
-  ansible.builtin.copy:
-    content: "[boot]\n"
-    dest: "/etc/wsl.conf"
-    force: no
-    owner: root
-    group: root
-    mode: u=rw,g=r,o=r
+- name: Start docker at startup - Windows 11
+  ansible.builtin.systemd:
+    state: enabled
+    name: docker
   when: winver == "11"
 
-- name: Start docker at startup - Windows 11
-  ansible.builtin.lineinfile:
-    path: "/etc/wsl.conf"
-    line: command = "service docker start"
-    state: present
-    insertafter: '[boot]'
+- name: Start docker - Windows 11
+  ansible.builtin.systemd:
+    state: started
+    name: docker
   when: winver == "11"
 
 - name: Delete old startup for Windows 10 - Windows 11

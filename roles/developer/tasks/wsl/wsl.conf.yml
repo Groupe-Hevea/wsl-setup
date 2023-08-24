@@ -1,0 +1,9 @@
+- name: Ensure wsl.conf exists - Windows 11
+  ansible.builtin.copy:
+    src: "wsl.conf"
+    dest: "/etc/wsl.conf"
+    force: no
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  when: winver == "11"
