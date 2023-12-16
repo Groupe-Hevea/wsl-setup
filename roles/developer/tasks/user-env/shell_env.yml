@@ -32,6 +32,7 @@
       export GID="$(id -g $(whoami))"
       export GITHUB_TOKEN={{ github_token }}
       export COMPOSER_AUTH="{\"github-oauth\": {\"github.com\": \"$GITHUB_TOKEN\"}}"
+      export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"
     dest: "/home/{{ lookup('env', 'USER') }}/.rc.d/98-shell_env_vars.sh"
     mode: '0644'
     owner: "{{ lookup('env', 'USER') }}"
