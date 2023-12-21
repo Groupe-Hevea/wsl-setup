@@ -1,0 +1,50 @@
+---
+- name: Check if aqua is installed
+  ansible.builtin.stat:
+    path: "{{ AQUA_INSTALL_PATH }}/aqua"
+  register: aqua_installed
+
+- name: Get latest aqua version
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/aquaproj/aqua/releases/latest"
+    return_content: yes
+    status_code: 200
+  register: aqua_latest_version
+  changed_when: false
+
+- name: Verify current version of aqua
+  ansible.builtin.shell: "{{ AQUA_INSTALL_PATH }}/aqua version"
+  register: aqua_version
+  when: aqua_installed.stat.exists
+  changed_when: false
+
+- name: Block Ensure aqua is installed
+  block:
+  - name: Download aqua
+    ansible.builtin.get_url:
+      url: "https://github.com/aquaproj/aqua/releases/download/{{ aqua_latest_version.json.tag_name }}/aqua_linux_{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' if ansible_architecture == 'aarch64' else ansible_architecture }}.tar.gz"
+      dest: /tmp/aqua.tar.gz
+
+  - name: Extract aqua
+    ansible.builtin.unarchive:
+      src: /tmp/aqua.tar.gz
+      dest: /tmp
+      remote_src: true
+
+  - name: Install aqua
+    become: true
+    ansible.builtin.copy:
+      src: /tmp/aqua
+      dest: "{{ AQUA_INSTALL_PATH }}/aqua"
+      mode: 0755
+      remote_src: true
+
+  - name: Remove aqua temp files
+    ansible.builtin.file:
+      path: /tmp/aqua.tar.gz
+      state: absent
+    loop:
+      - /tmp/aqua
+      - /tmp/aqua.tar.gz
+
+  when: (not aqua_installed.stat.exists) or ( (aqua_latest_version.json.tag_name | regex_replace('^v(.*)$', '\\1') ) not in aqua_version.stdout)

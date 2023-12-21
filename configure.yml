@@ -5,9 +5,11 @@
   become: yes
   vars:
     docker_users: ["{{ lookup('env', 'USER') }}"]
-  vars_prompt:
-    - name: github_token
-      prompt: What is your github_token?
-      private: false
+    github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+  pre_tasks:
+    - name: ensure GITHUB_TOKEN is provided
+      ansible.builtin.fail:
+        msg: "environment variable is not defined. Please use export GITHUB_TOKEN=<token> and rerun the playbook"
+      when: github_token == ''
   roles:
     - developer

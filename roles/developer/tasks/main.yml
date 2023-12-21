@@ -17,5 +17,8 @@
 - name: install gh cli
   include_tasks: tools/gh_cli.yml
 
+- name: install aqua cli
+  ansible.builtin.include_tasks: tools/aqua_cli.yml
+
 - name: install lastpass-cli
   include_tasks: tools/lastpass-cli.yml
