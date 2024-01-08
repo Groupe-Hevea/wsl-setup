@@ -41,7 +41,7 @@
 
   - name: Remove aqua temp files
     ansible.builtin.file:
-      path: /tmp/aqua.tar.gz
+      path: "{{ item }}"
       state: absent
     loop:
       - /tmp/aqua
