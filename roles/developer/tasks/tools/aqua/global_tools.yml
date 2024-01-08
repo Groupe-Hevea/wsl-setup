@@ -1,0 +1,22 @@
+- name: Script to update aqua global tools to latest version each login time
+  become: true
+  ansible.builtin.copy:
+    content: |
+      #!/bin/bash -eu
+      # Update aqua global tools to latest version
+      mkdir -p $HOME/.config/aqua
+      cd $HOME/.config/aqua
+      git init 2>&1 | grep -qv "Reinitialized existing Git repository" || true
+      git remote add -f origin https://${GITHUB_TOKEN}@github.com/Groupe-Hevea/tools-aquaproj.git 2>&1 | \
+        grep -v "already exists" || true
+      git config core.sparseCheckout true
+      echo "aqua-config/*" >> .git/info/sparse-checkout
+      git reset --hard HEAD 2>&1 | grep -qv "HEAD is now at" || true
+      git pull origin master 2>&1 | grep -qv "Already up to date." || true
+      export AQUA_GLOBAL_CONFIG="$HOME/.config/aqua/aqua-config/all.yaml:${AQUA_GLOBAL_CONFIG:-}"
+      aqua i -l
+      cd - 2>&1 | true
+    dest: "/home/{{ lookup('env', 'USER') }}/.rc.d/99-aqua_global_tools.sh"
+    mode: '0644'
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
