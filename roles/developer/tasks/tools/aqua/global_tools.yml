@@ -6,13 +6,13 @@
       # Update aqua global tools to latest version
       mkdir -p $HOME/.config/aqua
       git -C $HOME/.config/aqua init 2>&1 | true
-      git -C $HOME/.config/aqua remote add -f origin https://${GITHUB_TOKEN}@github.com/Groupe-Hevea/tools-aquaproj.git 2>&1 | true
+      git -C $HOME/.config/aqua remote add -f origin https://github.com/Groupe-Hevea/tools-aquaproj.git 2>&1 | true
       git -C $HOME/.config/aqua config core.sparseCheckout true
       echo "aqua-config/*" > $HOME/.config/aqua/.git/info/sparse-checkout
       git -C $HOME/.config/aqua reset --hard HEAD 2>&1 | true
       git -C $HOME/.config/aqua pull origin master 2>&1 | true
       export AQUA_GLOBAL_CONFIG="$HOME/.config/aqua/aqua-config/all.yaml:${AQUA_GLOBAL_CONFIG:-}"
-      aqua i -l
+      aqua i -l -a
     dest: "/home/{{ lookup('env', 'USER') }}/.rc.d/99-aqua_global_tools.sh"
     mode: '0644'
     owner: "{{ lookup('env', 'USER') }}"
