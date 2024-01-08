@@ -4,19 +4,15 @@
     content: |
       #!/bin/bash -eu
       # Update aqua global tools to latest version
-      whereami=$pwd
       mkdir -p $HOME/.config/aqua
-      cd $HOME/.config/aqua
-      git init 2>&1 | grep -qv "Reinitialized existing Git repository" || true
-      git remote add -f origin https://${GITHUB_TOKEN}@github.com/Groupe-Hevea/tools-aquaproj.git 2>&1 | true
-      git config core.sparseCheckout true
-      echo "aqua-config/*" > .git/info/sparse-checkout
-      git reset --hard HEAD 2>&1 | true
-      git pull origin master 2>&1 | true
+      git -C $HOME/.config/aqua init 2>&1 | true
+      git -C $HOME/.config/aqua remote add -f origin https://${GITHUB_TOKEN}@github.com/Groupe-Hevea/tools-aquaproj.git 2>&1 | true
+      git -C $HOME/.config/aqua config core.sparseCheckout true
+      echo "aqua-config/*" > $HOME/.config/aqua/.git/info/sparse-checkout
+      git -C $HOME/.config/aqua reset --hard HEAD 2>&1 | true
+      git -C $HOME/.config/aqua pull origin master 2>&1 | true
       export AQUA_GLOBAL_CONFIG="$HOME/.config/aqua/aqua-config/all.yaml:${AQUA_GLOBAL_CONFIG:-}"
-      cd $HOME/.config/aqua/aqua-config
       aqua i -l
-      cd $whereami
     dest: "/home/{{ lookup('env', 'USER') }}/.rc.d/99-aqua_global_tools.sh"
     mode: '0644'
     owner: "{{ lookup('env', 'USER') }}"
