@@ -1,7 +1,7 @@
 ---
 
 - name: Get Windows Version
-  shell: /mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0//powershell.exe -c "((Get-CimInstance -class Win32_OperatingSystem).version -split '\\.')[0]"
+  shell: /mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0//powershell.exe -c "(Get-CimInstance Win32_OperatingSystem).Caption -replace '[^\d]'"
   register: winver
   changed_when: false
   when: winver is undefined
