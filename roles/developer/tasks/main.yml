@@ -17,6 +17,9 @@
 - name: install gh cli
   include_tasks: tools/gh_cli.yml
 
+- name: install wslu
+  include_tasks: tools/wslu.yml
+
 - name: install aqua cli
   ansible.builtin.include_tasks: tools/aqua/aqua_cli.yml
 
