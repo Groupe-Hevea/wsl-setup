@@ -9,7 +9,24 @@
   pre_tasks:
     - name: ensure GITHUB_TOKEN is provided
       ansible.builtin.fail:
-        msg: "environment variable is not defined. Please use export GITHUB_TOKEN=<token> and rerun the playbook"
+        msg: "GITHUB_TOKEN environment variable is not defined. Please use export GITHUB_TOKEN=<token> and rerun the playbook"
       when: github_token == ''
+    - name: Effectuer une requête vers l'API GitHub avec le token
+      ansible.builtin.uri:
+        url: "https://api.github.com/user/issues"
+        headers:
+          Authorization: "Bearer {{ lookup('env', 'GITHUB_TOKEN') }}"
+        method: GET
+      register: github_response
+
+    - name: Afficher la réponse de l'API GitHub
+      debug:
+        var: github_response
+
+    - name: Validité du token
+      ansible.builtin.fail:
+        msg: "Le token Github fourni ({{ github_token }}) n'est pas valide. Vérifier qu'il ne soit pas expiré et que le configure SSO ait été réalisé."
+      when: github_response.status not in [200, 201] or github_response.x_github_sso is defined
+
   roles:
     - developer
