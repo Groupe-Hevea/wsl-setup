@@ -28,5 +28,17 @@
         msg: "Le token Github fourni ({{ github_token }}) n'est pas valide. Vérifier qu'il ne soit pas expiré et que le configure SSO ait été réalisé."
       when: github_response.status not in [200, 201] or github_response.x_github_sso is defined
 
+    - name: "Ensure git config user.email is configured"
+      become: false
+      community.general.git_config:
+        name: user.email
+        scope: global
+      register: git_email
+
+    - name: "Fail is git config user.email is not configured"
+      ansible.builtin.fail:
+        msg: "github user.email is not configured. Please use `git config --global user.email <email>` and rerun the playbook"
+      when: git_email.config_value == ""
+
   roles:
     - developer
