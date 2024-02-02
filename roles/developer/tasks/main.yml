@@ -5,6 +5,9 @@
 - name: set facts for use later
   include_tasks: tools/set_facts.yml
 
+- name: add autocomplete scripts
+  include_tasks: user-env/autocomplete.yml
+
 - name: customize user shell env
   include_tasks: user-env/shell_env.yml
 
