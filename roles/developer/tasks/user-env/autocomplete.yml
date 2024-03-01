@@ -1,0 +1,5 @@
+- name: Ensure go-task/task autocompletion is installed
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/go-task/task/main/completion/bash/task.bash
+    dest: /etc/bash_completion.d/task
+    mode: '0644'

@@ -1,0 +1,13 @@
+---
+- name: add wslu apt repository
+  ansible.builtin.apt_repository:
+    repo: ppa:wslutilities/wslu
+    codename: "{{ ansible_distribution_release }}"
+    state: present
+
+- name: install wslu package
+  ansible.builtin.apt:
+    name:
+      - wslu
+    state: latest
+    update_cache: yes

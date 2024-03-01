@@ -5,6 +5,9 @@
 - name: set facts for use later
   include_tasks: tools/set_facts.yml
 
+- name: add autocomplete scripts
+  include_tasks: user-env/autocomplete.yml
+
 - name: customize user shell env
   include_tasks: user-env/shell_env.yml
 
@@ -16,6 +19,9 @@
 
 - name: install gh cli
   include_tasks: tools/gh_cli.yml
+
+- name: install wslu
+  include_tasks: tools/wslu.yml
 
 - name: install aqua cli
   ansible.builtin.include_tasks: tools/aqua/aqua_cli.yml

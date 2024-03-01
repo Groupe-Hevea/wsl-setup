@@ -54,3 +54,13 @@
     mode: '0644'
     owner: "{{ lookup('env', 'USER') }}"
     group: "{{ lookup('env', 'USER') }}"
+
+- name: Enable silent authenticate to ghcr.io
+  ansible.builtin.copy:
+    content: |
+      # Authenticate to ghcr.io silently
+      (echo $GITHUB_TOKEN | docker login ghcr.io -u $(git config --global user.email) --password-stdin > /dev/null 2>&1 & disown)
+    dest: "/home/{{ lookup('env', 'USER') }}/.rc.d/99-docker_login.sh"
+    mode: '0644'
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"

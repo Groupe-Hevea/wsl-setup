@@ -1,7 +1,15 @@
 ---
 
 - name: Get Windows Version
-  shell: /mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0//powershell.exe -c "((Get-CimInstance -class Win32_OperatingSystem).version -split '\\.')[0]"
+  ansible.builtin.shell: |
+    /mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe -NonInteractive -NoProfile -c "
+    if ([System.Environment]::OSVersion.Version.Major -eq 10 -and [System.Environment]::OSVersion.Version.Build -lt 22000) {
+      10
+    } elseif ([System.Environment]::OSVersion.Version.Major -eq 10 -and [System.Environment]::OSVersion.Version.Build -ge 22000) {
+      11
+    } else{
+      'unknown'
+    }"
   register: winver
   changed_when: false
   when: winver is undefined
