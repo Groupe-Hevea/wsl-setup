@@ -4,6 +4,8 @@
   ansible.builtin.file:
     path: "/home/{{ lookup('env', 'USER') }}/.rc.d"
     state: directory
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
     mode: '0755'
 
 - name: load rc.d files for all shells
