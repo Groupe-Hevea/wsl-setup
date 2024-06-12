@@ -1,0 +1,7 @@
+---
+- name: install git-lfs
+  ansible.builtin.apt:
+    name:
+      - git-lfs
+    state: latest
+    update_cache: yes

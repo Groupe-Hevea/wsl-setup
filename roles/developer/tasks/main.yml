@@ -26,5 +26,8 @@
 - name: install lastpass-cli
   include_tasks: tools/lastpass-cli.yml
 
+- name: install lastpass-cli
+  include_tasks: tools/git-lfs.yml
+
 - name: ensure global tools are installed via https://github.com/Groupe-Hevea/tools-aquaproj
   ansible.builtin.include_tasks: tools/aqua/global_tools.yml
