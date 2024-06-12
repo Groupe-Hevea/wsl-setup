@@ -62,7 +62,7 @@
   ansible.builtin.copy:
     content: |
       # Start docker at startup
-      wsl.exe -u root -e sh -c "service docker status || service docker start"
+      wsl.exe -u root -e sh -c "service docker status >/dev/null || service docker start"
     dest: "/home/{{ lookup('env', 'USER') }}/.rc.d/00-docker_startup.sh"
     mode: '0644'
     owner: "{{ lookup('env', 'USER') }}"

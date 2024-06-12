@@ -11,9 +11,6 @@
 - name: customize user shell env
   include_tasks: user-env/shell_env.yml
 
-- name: install terraform
-  include_tasks: tools/terraform.yml
-
 - name: install docker
   include_tasks: tools/docker.yml
 
