@@ -1,9 +1,25 @@
 ---
-- name: add wslu apt repository
+- name: add wslu apt repository - Ubuntu
   ansible.builtin.apt_repository:
     repo: ppa:wslutilities/wslu
     codename: "{{ ansible_distribution_release }}"
     state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: WSL for Debian
+  when: ansible_distribution == 'Debian'
+  block:
+  - name: Add pkg.wslutiliti.es/public.key
+    ansible.builtin.apt_key:
+      url: https://pkg.wslutiliti.es/public.key
+      state: present
+
+  - name: add wslu apt repository - Debian
+    ansible.builtin.apt_repository:
+      repo: "deb [signed-by=/usr/share/keyrings/wslu-archive-keyring.pgp] https://pkg.wslutiliti.es/debian {{ ansible_distribution_release }} main"
+      codename: "{{ ansible_distribution_release }}"
+      state: present
+      filename: wslu
 
 - name: install wslu package
   ansible.builtin.apt:
