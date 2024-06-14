@@ -10,14 +10,13 @@
   when: ansible_distribution == 'Debian'
   block:
   - name: Add pkg.wslutiliti.es/public.key
-    ansible.builtin.apt_key:
+    ansible.builtin.get_url:
       url: https://pkg.wslutiliti.es/public.key
-      state: present
-      file: /usr/share/keyrings/wslu-archive-keyring.pgp
+      dest: /etc/apt/keyrings/wslu-archive-keyring.pgp
 
   - name: add wslu apt repository - Debian
     ansible.builtin.apt_repository:
-      repo: "deb [signed-by=/usr/share/keyrings/wslu-archive-keyring.pgp] https://pkg.wslutiliti.es/debian {{ ansible_distribution_release }} main"
+      repo: "deb [signed-by=/etc/apt/keyrings/wslu-archive-keyring.pgp] https://pkg.wslutiliti.es/debian {{ ansible_distribution_release }} main"
       codename: "{{ ansible_distribution_release }}"
       state: present
       filename: wslu
