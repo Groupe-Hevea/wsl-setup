@@ -13,6 +13,7 @@
     ansible.builtin.apt_key:
       url: https://pkg.wslutiliti.es/public.key
       state: present
+      file: /usr/share/keyrings/wslu-archive-keyring.pgp
 
   - name: add wslu apt repository - Debian
     ansible.builtin.apt_repository:
