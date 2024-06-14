@@ -9,6 +9,11 @@
 - name: WSL for Debian
   when: ansible_distribution == 'Debian'
   block:
+  - name: ensure /etc/apt/keyrings exists
+    ansible.builtin.file:
+      path: /etc/apt/keyrings
+      state: directory
+
   - name: Add pkg.wslutiliti.es/public.key
     ansible.builtin.get_url:
       url: https://pkg.wslutiliti.es/public.key
